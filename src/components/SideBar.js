@@ -3,15 +3,10 @@ import {
   MdClose,
   MdMenu,
   MdAdd,
-  MdOutlineCoffee,
-  MdOutlineVpnKey,
 } from 'react-icons/md';
-import { AiOutlineGithub } from 'react-icons/ai';
 import { ChatContext } from '../context/chatContext';
 import bot from '../assets/bot.ico';
-import DarkMode from './DarkMode';
-import Modal from './Modal';
-import Setting from './Setting';
+
 
 /**
  * A sidebar component that displays a list of nav items and a toggle
@@ -22,7 +17,7 @@ import Setting from './Setting';
 const SideBar = () => {
   const [open, setOpen] = useState(true);
   const [, , clearMessages] = useContext(ChatContext);
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
 
   function handleResize() {
     window.innerWidth <= 720 ? setOpen(false) : setOpen(true);
@@ -47,7 +42,7 @@ const SideBar = () => {
           </span>
         </div>
         <h1 className={`sidebar__app-title ${!open && 'scale-0 hidden'}`}>
-          ChatGPT
+          AI SHOP
         </h1>
         <div className={`sidebar__btn-close`} onClick={() => setOpen(!open)}>
           {open ? (
@@ -68,44 +63,6 @@ const SideBar = () => {
         </span>
       </div>
 
-      <div className='nav__bottom'>
-        <DarkMode open={open} />
-        <div className='nav'>
-          <a
-            href='https://www.buymeacoffee.com/eyuel'
-            rel='noreferrer'
-            target='_blank'
-            className='nav__item'>
-            <div className='nav__icons'>
-              <MdOutlineCoffee />
-            </div>
-            <h1 className={`${!open && 'hidden'}`}>Support this project</h1>
-          </a>
-        </div>
-        <div className='nav'>
-          <a
-            rel='noreferrer'
-            target='_blank'
-            href='https://github.com/EyuCoder/chatgpt-clone'
-            className='nav__item'>
-            <div className='nav__icons'>
-              <AiOutlineGithub />
-            </div>
-            <h1 className={`${!open && 'hidden'}`}>Clone on Github</h1>
-          </a>
-        </div>
-        <div onClick={() => setModalOpen(true)} className='nav'>
-          <span htmlFor='setting-modal' className='nav__item'>
-            <div className='nav__icons'>
-              <MdOutlineVpnKey />
-            </div>
-            <h1 className={`${!open && 'hidden'}`}>OpenAI Key</h1>
-          </span>
-        </div>
-      </div>
-      <Modal title='Setting' modalOpen={modalOpen} setModalOpen={setModalOpen}>
-        <Setting modalOpen={modalOpen} setModalOpen={setModalOpen} />
-      </Modal>
     </section>
   );
 };

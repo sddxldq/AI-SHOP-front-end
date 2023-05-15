@@ -6,6 +6,7 @@ import { MdSend } from 'react-icons/md';
 import Filter from 'bad-words';
 import { davinci } from '../utils/davinci';
 import { dalle } from '../utils/dalle';
+import { deepai } from '../utils/deepai';
 
 /**
  * A chat view component that displays a list of messages and a form for sending new messages.
@@ -15,7 +16,7 @@ const ChatView = () => {
   const inputRef = useRef();
   const [formValue, setFormValue] = useState('');
   const [thinking, setThinking] = useState(false);
-  const options = ['ChatGPT', 'DALL·E'];
+  const options = ['ChatGPT', 'DALL·E', 'DeepAI'];
   const [selected, setSelected] = useState(options[0]);
   const [messages, addMessage] = useContext(ChatContext);
 
@@ -72,11 +73,15 @@ const ChatView = () => {
         console.log(cleanPrompt)
         const data = await davinci(cleanPrompt);
         data && updateMessage(data, true, aiModel);
-      } else {
+      } else if (aiModel === options[1]) {
         const response = await dalle(cleanPrompt);
-        console.log(response)
         const data = response[0];
-        
+        console.log(data)
+        data && updateMessage(data, true, aiModel);
+      } else {
+        const response = await deepai(cleanPrompt);
+        console.log(response)
+        const data = response;
         data && updateMessage(data, true, aiModel);
       }
     } catch (err) {
@@ -125,6 +130,7 @@ const ChatView = () => {
           className='dropdown'>
           <option>{options[0]}</option>
           <option>{options[1]}</option>
+          <option>{options[2]}</option>
         </select>
         <div className='flex items-stretch justify-between w-full'>
           <textarea
