@@ -7,6 +7,7 @@ import Filter from 'bad-words';
 import { davinci } from '../utils/davinci';
 import { dalle } from '../utils/dalle';
 import { deepai } from '../utils/deepai';
+import Toggles from './Toggles';
 
 /**
  * A chat view component that displays a list of messages and a form for sending new messages.
@@ -123,31 +124,35 @@ const ChatView = () => {
 
         <span ref={messagesEndRef}></span>
       </main>
-      <form className='form' onSubmit={sendMessage}>
-        <select
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-          className='dropdown'>
-          <option>{options[0]}</option>
-          <option>{options[1]}</option>
-          <option>{options[2]}</option>
-        </select>
-        <div className='flex items-stretch justify-between w-full'>
-          <textarea
-            ref={inputRef}
-            className='chatview__textarea-message'
-            value={formValue}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => setFormValue(e.target.value)}
-          />
-          <button
-            type='submit'
-            className='chatview__btn-send'
-            disabled={!formValue}>
-            <MdSend size={30} />
-          </button>
-        </div>
-      </form>
+      <div>
+        {selected === 'ChatGPT' && <Toggles/>}
+        <form className='form' onSubmit={sendMessage}>
+          <select
+            value={selected}
+            onChange={(e) => setSelected(e.target.value)}
+            className='dropdown'>
+            <option>{options[0]}</option>
+            <option>{options[1]}</option>
+            <option>{options[2]}</option>
+          </select>
+          <div className='flex items-stretch justify-between w-full'>
+            <textarea
+              ref={inputRef}
+              className='chatview__textarea-message'
+              value={formValue}
+              onKeyDown={handleKeyDown}
+              onChange={(e) => setFormValue(e.target.value)}
+            />
+            <button
+              type='submit'
+              className='chatview__btn-send'
+              disabled={!formValue}>
+              <MdSend size={30} />
+            </button>
+          </div>
+        </form>
+      </div>
+      
     </div>
   );
 };
