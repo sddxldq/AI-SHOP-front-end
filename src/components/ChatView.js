@@ -20,6 +20,35 @@ const ChatView = () => {
   const options = ['ChatGPT', 'DALL·E', 'DeepAI'];
   const [selected, setSelected] = useState(options[0]);
   const [messages, addMessage] = useContext(ChatContext);
+  const [translate, setTranslate] = useState("");
+  const [rephrase, setRephrase] = useState(false);
+  const [summarize, setSummarize] = useState(false);
+  const [randomized, setRandomized] = useState(false);
+
+  // Callback function to receive data from the child Toggles component
+  const handleTranslate = (childData) => {
+    setTranslate(childData);
+  };
+
+  const handleRephrase = () => {
+    setRephrase(!rephrase);
+  };
+
+  const handleSummarize = () => {
+    setSummarize(!summarize);
+  };
+
+  const handleRandomized = () => {
+    setRandomized(!randomized);
+  };
+
+  const callbacks = {
+    translate: translate, rephrase: rephrase, summarize: summarize, randomized: randomized,
+    handleTranslate: handleTranslate,
+    handleRephrase: handleRephrase,
+    handleSummarize: handleSummarize,
+    handleRandomized: handleRandomized,
+  };
 
   /**
    * Scrolls the chat area to the bottom.
@@ -54,12 +83,33 @@ const ChatView = () => {
    */
   const sendMessage = async (e) => {
     e.preventDefault();
-
-
+    
     const filter = new Filter();
     const cleanPrompt = filter.isProfane(formValue)
       ? filter.clean(formValue)
       : formValue;
+
+    let customizedMessage = cleanPrompt;
+    if (translate !== "") {
+      customizedMessage = 'translate "' + cleanPrompt + '" into ' + translate;
+      if (rephrase) {
+        customizedMessage = customizedMessage + ", and then rephrase in " + translate;
+      }
+      if (summarize) {
+        customizedMessage = customizedMessage + ", and then summarize in " + translate;
+      }
+    }else{
+      if (rephrase) {
+        customizedMessage = 'rephrase "' + customizedMessage + '"'
+      }
+      if (!rephrase&&summarize) {
+        customizedMessage = 'summarize "' + customizedMessage + '"'
+      }
+      if (rephrase&&summarize) {
+        customizedMessage = customizedMessage + ", and then summarize"
+      }
+    }
+    
 
     const newMsg = cleanPrompt;
     const aiModel = selected;
@@ -71,8 +121,8 @@ const ChatView = () => {
     console.log(selected);
     try {
       if (aiModel === options[0]) {
-        console.log(cleanPrompt)
-        const data = await davinci(cleanPrompt);
+        console.log(customizedMessage)
+        const data = await davinci(customizedMessage);
         data && updateMessage(data, true, aiModel);
       } else if (aiModel === options[1]) {
         const response = await dalle(cleanPrompt);
@@ -125,7 +175,7 @@ const ChatView = () => {
         <span ref={messagesEndRef}></span>
       </main>
       <div>
-        {selected === 'ChatGPT' && <Toggles/>}
+        {selected === 'ChatGPT' && <Toggles onData={callbacks} />}
         <form className='form' onSubmit={sendMessage}>
           <select
             value={selected}
@@ -152,7 +202,7 @@ const ChatView = () => {
           </div>
         </form>
       </div>
-      
+
     </div>
   );
 };
