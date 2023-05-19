@@ -6,6 +6,7 @@ import {
 } from 'react-icons/md';
 import { ChatContext } from '../context/chatContext';
 import bot from '../assets/bot.ico';
+import DarkMode from './DarkMode';
 
 
 /**
@@ -62,7 +63,10 @@ const SideBar = () => {
           <h1 className={`${!open && 'hidden'}`}>New chat</h1>
         </span>
       </div>
-
+      <div className='nav__bottom'>
+        <DarkMode open={open}/>
+        <span className='h-16 text-slate-100 text-center border-t-2 pt-5 mt-4'>Made By Alfred</span>
+      </div>
     </section>
   );
 };

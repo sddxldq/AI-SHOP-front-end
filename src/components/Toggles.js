@@ -18,7 +18,7 @@ const Toggles = ({ onData }) => {
         <select className="select w-48 max-w-xs" value={onData.translate} onChange={handleTranslateClick}>
           <option disabled defaultValue>Translate into</option>
           <option value="">No translation</option>
-          <option value="Chinese">Chinese</option>
+          <option value="Chinese">中文</option>
           <option value="Française">Française</option>
           <option value="Español">Español</option>
         </select>
