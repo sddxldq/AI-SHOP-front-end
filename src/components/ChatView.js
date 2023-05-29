@@ -8,6 +8,7 @@ import { davinci } from '../utils/davinci';
 import { dalle } from '../utils/dalle';
 import { deepai } from '../utils/deepai';
 import Toggles from './Toggles';
+import DeepAITunes from './DeepAITunes';
 
 /**
  * A chat view component that displays a list of messages and a form for sending new messages.
@@ -25,7 +26,9 @@ const ChatView = () => {
   const [summarize, setSummarize] = useState(false);
   const [randomized, setRandomized] = useState(false);
 
-  // Callback function to receive data from the child Toggles component
+  const [deepAIImageStyle, setDeepAIImageStyle] = useState("");
+
+  // Callback function to receive data from the child Toggles component for chatGPT
   const handleTranslate = (childData) => {
     setTranslate(childData);
   };
@@ -42,13 +45,24 @@ const ChatView = () => {
     setRandomized(!randomized);
   };
 
-  const callbacks = {
+   // Callback function to receive data from the child Selector component for deepAI
+  const handleDeepAIImageStyle = (childData) => {
+    setDeepAIImageStyle(childData);
+  };
+
+  const GPTcallbacks = {
     translate: translate, rephrase: rephrase, summarize: summarize, randomized: randomized,
     handleTranslate: handleTranslate,
     handleRephrase: handleRephrase,
     handleSummarize: handleSummarize,
     handleRandomized: handleRandomized,
   };
+
+  const DeepAIcallbacks = {
+    deepAIImageStyle: deepAIImageStyle,
+    handleDeepAIImageStyle: handleDeepAIImageStyle,
+  };
+
 
   /**
    * Scrolls the chat area to the bottom.
@@ -130,7 +144,11 @@ const ChatView = () => {
         console.log(data)
         data && updateMessage(data, true, aiModel);
       } else {
-        const response = await deepai(cleanPrompt);
+        const deepAIParms = {
+          text: cleanPrompt,
+          style: deepAIImageStyle
+        }
+        const response = await deepai(deepAIParms);
         console.log(response)
         const data = response;
         data && updateMessage(data, true, aiModel);
@@ -175,7 +193,8 @@ const ChatView = () => {
         <span ref={messagesEndRef}></span>
       </main>
       <div>
-        {selected === 'ChatGPT' && <Toggles onData={callbacks} />}
+        {selected === 'ChatGPT' && <Toggles onData={GPTcallbacks} />}
+        {selected === 'DeepAI' && <DeepAITunes onData={DeepAIcallbacks} />}
         <form className='form' onSubmit={sendMessage}>
           <select
             value={selected}

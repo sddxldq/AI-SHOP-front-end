@@ -21,15 +21,16 @@ import axios from "axios";
 
 
 const api = axios.create({
-  // baseURL: 'http://localhost:8080/image'
-  baseURL: 'http://3.136.86.150:8080/image'
+  baseURL: 'http://localhost:8080/image'
+  // baseURL: 'http://3.136.86.150:8080/image'
 });
 
 export const deepai = async (prompt) => {  
   try {
     const response = await api.get(`/deepai`, {
       params: {
-        text: `"${prompt}"`
+        style: `${prompt.style}`,
+        text: `"${prompt.text}"`
       },
     });
     return response.data.data;

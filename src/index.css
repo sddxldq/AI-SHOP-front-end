@@ -80,6 +80,10 @@
     @apply h-16 flex flex-row bg-amber-300 items-center place-content-evenly;
   }
 
+  .DeepAISelectorArea {
+    @apply h-16 flex flex-row bg-amber-300 items-center;
+  }
+
   .form {
     @apply flex justify-between flex-col items-stretch sm:flex-row m-2 bottom-0 left-0 right-0
     text-black dark:text-white duration-300;
